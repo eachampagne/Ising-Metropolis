@@ -1,13 +1,14 @@
 #include <iostream>
 #include "ensemble.h"
-//#include "ensemble.cpp" //?
 using namespace std;
-//using namespace Ensemble;
 
 int main() {
-    Ensemble testEnsemble;
+    Ensemble testEnsemble(16, 32);
 
     testEnsemble.test();
+
+    cout << "Width: " << testEnsemble.getWidth() << "\n";
+    cout << "Height: " << testEnsemble.getHeight() << "\n";
 
     return 0;
 }
