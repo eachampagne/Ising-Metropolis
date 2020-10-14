@@ -1,3 +1,5 @@
+//From https://www.w3schools.com/cpp/cpp_class_methods.asp
+
 #include <string>
 using namespace std;
 

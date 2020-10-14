@@ -1,3 +1,8 @@
+//from https://www.w3schools.com/cpp/cpp_class_methods.asp
+//1fileClassTest.exe is an earlier iteration of this same example, before I split the class definition
+//into a separate header file
+//I don't know why VS Code is finding errors in the previous comment....
+
 #include <iostream>
 #include <string>
 #include "myclass.h"

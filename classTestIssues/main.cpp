@@ -1,3 +1,5 @@
+//from http://www.math.uaa.alaska.edu/~afkjm/csce211/handouts/SeparateCompilation.pdf
+
 #include <iostream>
 #include "Num.h"
 
