@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <vector>
 using namespace std;
 
@@ -6,20 +7,21 @@ using namespace std;
 #define ENSEMBLE_H
 
 class Ensemble {
-    private:
-        unsigned int width;
-        unsigned int height;
     public:
-        std::vector<std::vector<bool>> grid;
-        Ensemble(unsigned int w, unsigned int h);
+        //std::vector<std::vector<bool>> grid;
+        Ensemble();
 
-        bool newRandomSpin();
-
-        unsigned int getWidth();
-        unsigned int getHeight();
+        //It turned out to be easier to have the init functions deal with random number generation rather than
+        //making a specific function
+        //bool newRandomSpin(); 
 
         void test();
-        //int testProperty;
+
+        //If I stored the dimensions as a vector, I could consolidate some functions between 1 and 2 d
+        //But it's probably not great to have a whole bunch of functions have to dynamically determine
+        //what dimension they're working on
+
+        //At the rate I'm going, Ensemble would be better as an abstract class
 
         //Also need properties for energy, entropy, etc.
 };
