@@ -9,7 +9,7 @@ Ensemble::Ensemble() {
 }
 /**
 bool Ensemble::newRandomSpin() {
-    //randomly generates either an up or down spin    
+    //randomly generates either an up or down spin
     bool spin; //True is spin up, false is spin down
     //I guess technically I could use an enum for this, but why create a two-state enum?
 

@@ -11,6 +11,50 @@ Ensemble2d::Ensemble2d(unsigned int w, unsigned int h) {
     height = h;
 }
 
+unsigned int Ensemble2d::getNextIndexY(unsigned int indexY) {
+    if(indexY == height - 1) {
+        return 0;
+    } else {
+        return indexY + 1;
+    }
+}
+
+unsigned int Ensemble2d::getPrevIndexY(unsigned int indexY) {
+    if(indexY == 0) {
+        return height - 1;
+    } else {
+        return indexY - 1;
+    }
+}
+
+unsigned int Ensemble2d::getNextIndexX(unsigned int indexX) {
+    if(indexX == width - 1) {
+        return 0;
+    } else {
+        return indexX + 1;
+    }
+}
+
+unsigned int Ensemble2d::getPrevIndexX(unsigned int indexX) {
+    if(indexX == 0) {
+        return width - 1;
+    } else {
+        return indexX - 1;
+    }
+}
+
+int Ensemble2d::calcEnergy() { 
+    cout << "Note that I haven't actually found the equation for 2D energy, I think this is it but need to check.\n";
+    int energy = 0; //in terms of JkT
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            (grid[i][j] == grid[getNextIndexY(i)][j]) ? (energy -= 1) : (energy += 1);
+            (grid[i][j] == grid[i][getNextIndexX(j)]) ? (energy -= 1) : (energy += 1);
+        }
+    }
+    return energy;
+}
+
 //Probability of an up spin. 0 (or less) is all down, 1 (or greater) is all up
 void Ensemble2d::initGrid(float prob){
     if(prob <= 0) {
@@ -22,6 +66,7 @@ void Ensemble2d::initGrid(float prob){
         }
     } else if (prob >= 1) {
         for(int i = 0; i < height; i++) {
+            grid.push_back({});
             for(int j = 0; j < width; j++) {
                 grid[i].push_back(true);
             }

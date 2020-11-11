@@ -8,8 +8,8 @@ using namespace std;
 
 class Ensemble {
     public:
-        //std::vector<std::vector<bool>> grid;
         Ensemble();
+        //make a public static var for boltzmann's const
 
         //It turned out to be easier to have the init functions deal with random number generation rather than
         //making a specific function

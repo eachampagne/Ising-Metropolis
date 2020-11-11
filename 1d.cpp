@@ -9,8 +9,9 @@ int main() {
 
     cout << "Length: " << testEnsemble.getLength() << "\n";
 
-    testEnsemble.initGrid(0.9);
+    testEnsemble.initGrid(0.0);
     testEnsemble.trace();
+    cout << "Energy = " << testEnsemble.calcEnergy() << " JkT\n";
 
     return 0;
 }
