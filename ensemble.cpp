@@ -4,8 +4,23 @@
 #include "ensemble.h"
 using namespace std;
 
-Ensemble::Ensemble() {
-    cout << "Accessing the base ensemble constructor\n";
+Ensemble::Ensemble(float temp, float J) {
+    equilFlag = false; //Used for while loops; becomes true when ensemble reaches equilibrium conditions
+    temperature = temp;
+    J_strength = J;
+}
+
+const double Ensemble::k_boltzmann = 1.380649e-23; //In Joules per Kelvin
+
+//If the simulation hasn't taken any steps, this returns -1 rather than NaN or something similarly hard to handle
+float Ensemble::calcAcceptanceRate() { 
+    return (number_steps == 0) ? -1.0 : (float)(number_acceptances) / (float)(number_steps);
+}
+float Ensemble::getTemp() {
+    return temperature;
+}
+float Ensemble::getJ() {
+    return J_strength;
 }
 /**
 bool Ensemble::newRandomSpin() {

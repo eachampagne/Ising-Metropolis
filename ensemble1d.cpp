@@ -6,8 +6,61 @@
 using namespace std;
 
 
-Ensemble1d::Ensemble1d(unsigned int l) {
+Ensemble1d::Ensemble1d(unsigned int l, float temp, float J) : Ensemble(temp, J) {
     length = l;
+}
+
+void Ensemble1d::run() {
+    while(!equilFlag) {
+        tryOneFlip();
+    }
+}
+
+void Ensemble1d::flipSpin(unsigned int index){
+    grid[index] = !grid[index];
+}
+
+void Ensemble1d::tryOneFlip() {
+    //There must be some way to not have to do this every single time I run the function!
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> dis(0.0, 1.0);
+
+    unsigned int index = floor(dis(gen) * length); //Yeah, I probably could just generate a random integer... but given that I don't really understand the random number generation, I'd rather use fewer different ones
+    cout << "Chosen index: " << index << "\n";
+
+    //Don't need to find the energy of the entire system
+    int localEnergy = 0; //in terms of JkT
+    (grid[index] == grid[getNextIndex(index)]) ? (localEnergy -= 1) : (localEnergy += 1);
+    (grid[index] == grid[getPrevIndex(index)]) ? (localEnergy -= 1) : (localEnergy += 1);
+
+    int localEnergyFlipped = 0; //in terms of JkT
+    (!grid[index] == grid[getNextIndex(index)]) ? (localEnergyFlipped -= 1) : (localEnergyFlipped += 1);
+    (!grid[index] == grid[getPrevIndex(index)]) ? (localEnergyFlipped -= 1) : (localEnergyFlipped += 1);
+
+    int deltaEnergy = localEnergyFlipped - localEnergy;
+    cout << "Delta E: " << deltaEnergy << " J\n"; //in terms of JkT
+
+    if((float)(deltaEnergy) * J_strength <= 0.0) { //If they deltaE = 0 (or J = 0) then e^0 = 1 so it would always flip
+        flipSpin(index);
+        number_steps++;
+        number_acceptances++;
+        cout << "Automatic flip!\n";
+    } else {
+        float prob = exp(-(float)(deltaEnergy) * J_strength / k_boltzmann / temperature);  //e^deltaE/kT
+        cout << "Probability is " << prob << "\n";
+        float r = dis(gen);
+        if(r < prob) {
+            flipSpin(index);
+            number_steps++;
+            number_acceptances++;
+            cout << "Flipped!\n";
+        } else {
+            number_steps++;
+            cout << "No flip.\n";
+        }
+    }
+    trace();
 }
 
 unsigned int Ensemble1d::getNextIndex(unsigned int index) {
@@ -27,7 +80,7 @@ unsigned int Ensemble1d::getPrevIndex(unsigned int index) {
 }
 
 int Ensemble1d::calcEnergy() { 
-    int energy = 0; //in terms of JkT
+    int energy = 0; //in terms of J
     for(int i = 0; i < length; i++) {
         (grid[i] == grid[getNextIndex(i)]) ? (energy -= 1) : (energy += 1);
     }

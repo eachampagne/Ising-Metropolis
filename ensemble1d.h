@@ -12,15 +12,20 @@ class Ensemble1d : public Ensemble {
         unsigned int getNextIndex(unsigned int index); //get index of neighbor in positive direction
         unsigned int getPrevIndex(unsigned int index); //get index of neighbor in negative direction
     public:
+        Ensemble1d(unsigned int l, float temp, float J);
         std::vector<bool> grid = {};
-        Ensemble1d(unsigned int l);
 
         int calcEnergy(); //in terms of kT
         unsigned int getLength();
 
+        void flipSpin(unsigned int index); //This should ultimately be private, but I'm leaving it here for now for testing purposes
+        void tryOneFlip();
+
         void trace();
         void initGrid(float prob);
         void test();
+
+        void run();
         //Also need properties for energy, entropy, etc.
 };
 

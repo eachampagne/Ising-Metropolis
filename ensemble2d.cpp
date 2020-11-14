@@ -6,9 +6,13 @@
 using namespace std;
 
 
-Ensemble2d::Ensemble2d(unsigned int w, unsigned int h) {
+Ensemble2d::Ensemble2d(unsigned int w, unsigned int h, float temp, float J) : Ensemble(temp, J) {
     width = w;
     height = h;
+}
+
+void Ensemble2d::flipSpin(unsigned int x, unsigned int y){
+    grid[y][x] = !grid[y][x];
 }
 
 unsigned int Ensemble2d::getNextIndexY(unsigned int indexY) {
@@ -45,7 +49,7 @@ unsigned int Ensemble2d::getPrevIndexX(unsigned int indexX) {
 
 int Ensemble2d::calcEnergy() { 
     cout << "Note that I haven't actually found the equation for 2D energy, I think this is it but need to check.\n";
-    int energy = 0; //in terms of JkT
+    int energy = 0; //in terms of J
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             (grid[i][j] == grid[getNextIndexY(i)][j]) ? (energy -= 1) : (energy += 1);
