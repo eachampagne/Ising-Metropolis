@@ -4,10 +4,15 @@
 #include "ensemble.h"
 using namespace std;
 
-Ensemble::Ensemble(float temp, float J) {
+Ensemble::Ensemble(float temp, float J, float mu, bool verb, unsigned int max) {
     equilFlag = false; //Used for while loops; becomes true when ensemble reaches equilibrium conditions
     temperature = temp;
     J_strength = J;
+    mu_strength = mu;
+    verbose = verb;
+    max_steps = max;
+    number_steps = 0;
+    number_acceptances = 0;
 }
 
 const double Ensemble::k_boltzmann = 1.380649e-23; //In Joules per Kelvin
@@ -16,11 +21,44 @@ const double Ensemble::k_boltzmann = 1.380649e-23; //In Joules per Kelvin
 float Ensemble::calcAcceptanceRate() { 
     return (number_steps == 0) ? -1.0 : (float)(number_acceptances) / (float)(number_steps);
 }
+float Ensemble::calcEnergyMean(unsigned int startingIndex) {
+    unsigned int n = energies.size() - startingIndex; //CHECK FOR OFF-BY-ONE ERROR
+    int sum = 0;
+    for(unsigned int i = startingIndex; i < energies.size(); i++) {
+        sum += energies[i];
+    }
+    return (float)(sum) / (float)(n);
+}
+float Ensemble::calcEnergyStdDev(unsigned int startingIndex) {
+    float energyMean = calcEnergyMean(startingIndex);
+    unsigned int n = energies.size() - startingIndex; //CHECK FOR OFF-BY-ONE ERROR
+    float sum = 0;
+    for(unsigned int i = startingIndex; i < energies.size(); i++) {
+        sum += pow((float)(energies[i]) - energyMean, 2.0);
+    }
+    return pow((float)(sum) / (float)(n), 0.5);
+}
+float Ensemble::calcMagnetMean(unsigned int startingIndex) {
+    unsigned int n = magnetizations.size() - startingIndex; //CHECK FOR OFF-BY-ONE ERROR
+    int sum = 0;
+    for(unsigned int i = startingIndex; i < energies.size(); i++) {
+        sum += magnetizations[i];
+    }
+    return (float)(sum) / (float)(n);
+}
+float Ensemble::calcCV(unsigned int startingIndex) {
+    float stdDev = calcEnergyStdDev(startingIndex) * J_strength;
+    float CV = pow(stdDev, 2.0) / k_boltzmann / temperature;
+    return CV;
+}
 float Ensemble::getTemp() {
     return temperature;
 }
 float Ensemble::getJ() {
     return J_strength;
+}
+float Ensemble::getMu() {
+    return mu_strength;
 }
 /**
 bool Ensemble::newRandomSpin() {

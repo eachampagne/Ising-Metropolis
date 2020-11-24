@@ -15,20 +15,24 @@ class Ensemble2d : public Ensemble {
         unsigned int getNextIndexY(unsigned int index); //get y index of neighbor in positive y direction
         unsigned int getPrevIndexY(unsigned int index); //get y index of neighbor in negative y direction
     public:
-        Ensemble2d(unsigned int w, unsigned int h, float temp, float J);
+        Ensemble2d(unsigned int w, unsigned int h, float temp, float J, float mu, bool verb, unsigned int max);
         std::vector<std::vector<bool>> grid = {};
 
         unsigned int getWidth();
         unsigned int getHeight();
 
         void flipSpin(unsigned int x, unsigned int y); //This should ultimately be private, but I'm leaving it here for now for testing purposes
+        void tryOneFlip();
 
         void trace();
         void initGrid(float prob);
         void test();
 
         int calcEnergy();
+        int calcMagnetization();
         //Also need properties for energy, entropy, etc.
+
+        void run(bool showResults, unsigned int stepsToEquil);
 };
 
 #endif

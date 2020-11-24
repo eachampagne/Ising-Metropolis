@@ -3,24 +3,17 @@
 using namespace std;
 
 int main() {
-    Ensemble2d testEnsemble(2, 4, 1.1, 3.0);
+    float mu = 1.0;
+    unsigned int max_steps = 10000;
+    unsigned int equ_steps = 2000; //This better be far enough
+    float J = 3.0 * Ensemble::k_boltzmann;
 
-    testEnsemble.test();
-
-    cout << "Width: " << testEnsemble.getWidth() << "\n";
-    cout << "Height: " << testEnsemble.getHeight() << "\n";
-    cout << "Temperature: " << testEnsemble.getTemp() << "\n";
-    cout << "J: " << testEnsemble.getJ() << "\n";
-
-
-    testEnsemble.initGrid(0.5);
-    testEnsemble.trace();
-    cout << "Energy = " << testEnsemble.calcEnergy() << " JkT\n";
-
-    testEnsemble.flipSpin(0,1);
-    testEnsemble.trace();
-    cout << "Energy = " << testEnsemble.calcEnergy() << " JkT\n";
-
+    for(int i = 0; i < 201; i++) {
+        float temp = (float)(i) * 0.1;
+        Ensemble2d testEnsemble(32, 32, temp, J, mu, false, max_steps);
+        testEnsemble.initGrid(0.5);
+        testEnsemble.run(true, equ_steps);
+    }
 
     return 0;
 }
